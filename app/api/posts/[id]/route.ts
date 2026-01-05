@@ -2,11 +2,9 @@ import { connectMongoDB } from "../../../../lib/mongodb";
 import Post from "@/models/post";
 import { NextResponse } from "next/server";
 
-type RouteParams = {
-  params: {
-    id: string;
-  };
-};
+interface RouteParams {
+  params: Promise<{ id: string }>;
+}
 
 export async function GET(req: Request, { params }: RouteParams) {
   const { id } = await params;
