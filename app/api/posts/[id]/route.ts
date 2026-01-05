@@ -3,12 +3,13 @@ import Post from "@/models/post";
 import { NextResponse } from "next/server";
 
 interface RouteParams {
-  params: Promise<{ id: string }>;
+  // ยืนยันว่า params เป็น Promise
+  params: Promise<{ id: string }>; 
 }
 
 export async function GET(req: Request, { params }: RouteParams) {
   const { id } = await params;
-
+  // ... (โค้ด GET เดิม)
   await connectMongoDB();
   const post = await Post.findOne({ _id: id });
 
@@ -21,6 +22,7 @@ export async function GET(req: Request, { params }: RouteParams) {
 
 export async function PUT(req: Request, { params }: RouteParams) {
   const { id } = await params;
+  // ... (โค้ด PUT เดิม)
   const { title: title, img: img, content: content } = await req.json();
   await connectMongoDB();
   await Post.findByIdAndUpdate(id, { title, img, content });
@@ -29,12 +31,10 @@ export async function PUT(req: Request, { params }: RouteParams) {
 
 export async function DELETE(
   req: Request,
-  // ไม่ต้องเปลี่ยน Type Definition ตรงนี้ สามารถใช้แบบเดิมได้
-  { params }: { params: { id: string } }
+  { params }: RouteParams // <<< แก้ไขตรงนี้ให้ใช้ RouteParams
 ) {
   try {
-    // เพิ่ม 'await' เข้าไปตรงนี้ครับ
-    const { id } = await params; // แก้ไข: ต้อง await params ก่อนดึง id
+    const { id } = await params; // <<< และบรรทัดนี้ต้องมี await
 
     await connectMongoDB();
     const deletedPost = await Post.findByIdAndDelete(id);
@@ -48,7 +48,6 @@ export async function DELETE(
 
     return NextResponse.json({ message: "ลบสำเร็จ" }, { status: 200 });
   } catch (error) {
-    // ควรจัดการ error ที่นี่ให้ละเอียดขึ้น
     console.error(error);
     return NextResponse.json(
       { message: "เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์" },
