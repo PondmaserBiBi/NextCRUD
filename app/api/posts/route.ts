@@ -2,8 +2,6 @@ import { connectMongoDB } from "../../../lib/mongodb";
 import Post from "../../../models/post";
 import { NextResponse } from "next/server";
 
-
-
 export async function POST(req: Request) {
   const { title, img, content } = await req.json();
 
@@ -15,7 +13,5 @@ export async function POST(req: Request) {
 export async function GET() {
   await connectMongoDB();
   const posts = await Post.find({});
-  return NextResponse.json({ posts });
+  return NextResponse.json({ posts }, { status: 200 });
 }
-
-

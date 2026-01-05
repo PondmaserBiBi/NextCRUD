@@ -15,10 +15,11 @@ const Delete = ({ id }: DeleteProps) => {
     if (!confirmed) return;
 
     try {
+      // แก้ไข URL ตรงนี้: ลบ "?id=" ออก แล้วต่อ id เข้าไปตรงๆ
       await axios.delete(`/api/posts/${id}`);
-      router.refresh(); 
+      router.refresh();
     } catch (error) {
-      console.error(error);
+      console.error("Delete Error:", error);
       alert("Delete failed");
     }
   };

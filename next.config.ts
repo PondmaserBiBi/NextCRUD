@@ -1,8 +1,13 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+const nextConfig = {
   images: {
-    domains: ["fastly.picsum.photos"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "fastly.picsum.photos", // เปลี่ยนเป็นโดเมนจริงของคุณ
+        port: "",
+        pathname: "/**", // รองรับทุก path
+      },
+    ],
   },
 };
 
